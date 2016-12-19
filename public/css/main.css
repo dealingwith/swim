@@ -1,0 +1,53 @@
+body {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'source-code-pro', Consolas, monaco, monospace;
+  font-size: 1.5rem;
+}
+header {
+  margin-bottom: 25px;
+  padding: 0px 10px;
+}
+.main-textarea.form-control, .main-textarea.form-control:focus {
+  border: 0px;
+  border-radius: 0;
+  box-shadow: none;
+  color: #333;
+  height: 80%;
+  outline: none;
+  padding: 12px 15px;
+}
+.white, .reference {
+  background-color: white;
+}
+.yellow, .reference:not(.images):hover {
+  background-color: rgba(255, 255, 144, 0.5);
+}
+.dark-grey, {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.reference, .reference-subhead {
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  padding: 10px;
+}
+.reference-subhead {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+.reference-subhead:not(:first-child) {
+  border-top: 2px #ccc dashed;
+  margin-top: 10px;
+  padding-top: 12px;
+}
+.reference .head {
+  font-weight: bold;
+}
+.reference-results {
+  max-height: 80%;
+  overflow: scroll;
+}
+.reference img {
+  padding: 2px;
+  max-height: 50px;
+}
