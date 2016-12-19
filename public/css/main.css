@@ -4,6 +4,7 @@ body {
   font-size: 1.5rem;
 }
 header {
+  border-bottom: 2px solid #47a6e6;
   margin-bottom: 25px;
   padding: 0px 10px;
 }
@@ -20,7 +21,7 @@ header {
   background-color: white;
 }
 .yellow, .reference:not(.images):hover {
-  background-color: rgba(255, 255, 144, 0.5);
+  background-color: #fcf8e3;
 }
 .dark-grey, {
   background-color: rgba(0, 0, 0, 0.1);
@@ -30,13 +31,14 @@ header {
   font-size: 1.2rem;
   margin-bottom: 5px;
   padding: 10px;
+  position: relative;
 }
 .reference-subhead {
   font-size: 1.4rem;
   font-weight: bold;
 }
 .reference-subhead:not(:first-child) {
-  border-top: 2px #ccc dashed;
+  border-top: 2px solid #ccc;
   margin-top: 10px;
   padding-top: 12px;
 }
@@ -50,4 +52,30 @@ header {
 .reference img {
   padding: 2px;
   max-height: 50px;
+}
+.reference p {
+  margin: 0;
+  padding-bottom: 10px;
+}
+.reference-menu {
+  padding: 5px;
+  margin: 0px -10px -10px;
+  opacity: 0.5;
+  text-align: center;
+}
+.reference:not(.images):hover .reference-menu {
+  background-color: #d9edf7;
+  opacity: 1;
+}
+.reference-menu a {
+  color: black;
+  padding: 0 5px;
+  text-decoration: none;
+}
+.reference-menu a:hover .link-text {
+  border-bottom: 1px solid black;
+}
+.reference-menu .glyphicon {
+  color: #404040;
+  top: 2px;
 }

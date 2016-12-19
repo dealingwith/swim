@@ -16,7 +16,7 @@ $(function() {
     }
   });
 
-  $('body').on('click', function(e) {
+  $('.reference-results').on('click', function(e) {
     var $target = $(e.target).closest('.reference');
     if ($target.data('href')) {
       var win = window.open($target.data('href'), '_blank');
@@ -52,7 +52,7 @@ function doSearch(search) {
       $imageResults.prependTo($('.reference-results'));
     }
     
-    $('.reference-results').prepend(`<div class="reference-subhead yellow">${search}</div>`);  
+    $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-search"></span> ${search}</div>`);  
     var backgroundTimeout = setTimeout(function() {
       $('.reference-subhead').removeClass('yellow');
     }, 3000);
