@@ -55,17 +55,20 @@ function doSearch(search) {
     $('.reference-results').prepend(`<div class="reference-subhead yellow">${search}</div>`);  
     var backgroundTimeout = setTimeout(function() {
       $('.reference-subhead').removeClass('yellow');
-    }, 2000);
+    }, 3000);
   }).fail(function(error) {
     console.log(error);
   });
 }
 
 function populateWebResults(title, link, description) {
-  var $referenceResults = $(`<div class="reference" data-href="${link}"></div>`);
-  $referenceResults.append(`<p class="head">${title}</p>`);
-  $referenceResults.append(`<p>${description}</p>`);
-  $referenceResults.prependTo($('.reference-results'));
+  var referenceResultsTemplate = Handlebars.compile($('#template-result').html() || "");
+  var referenceResultsHtml = referenceResultsTemplate({
+    title: title,
+    link: link,
+    description: description
+  });
+  $(referenceResultsHtml).prependTo($('.reference-results'));
 }
 
 function populateImageResults($imageResults, link, thumb) {

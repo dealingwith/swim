@@ -5,3 +5,7 @@
     .col-md-8
       %textarea{:class => 'main-textarea form-control', :placeholder => 'Type things you want to search for {in brackets like this}'}
     .col-md-4.reference-results
+
+%script{:id => 'template-result', :type => "text/x-handlebars-template"}
+  = File.read "views/templates/result.html"
+
