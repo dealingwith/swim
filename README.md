@@ -14,4 +14,4 @@ Personal Knowledge Management for the Masses
 
 Get a [Bing API key](https://www.microsoft.com/cognitive-services/en-us/bing-web-search-api).
 
-Add to `BING_KEY` in `swim.js`.
+Add to `BING_KEY` in `consts.js`.
