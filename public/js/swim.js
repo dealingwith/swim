@@ -22,15 +22,17 @@ $(function() {
     // menu links
     var $menu = $target.closest('.menu');
     if ($menu.length) {
+      var link = $menu.closest('.reference').data('href');
+      // these traversals are nonsense. refactor this with something
+      var text = $($menu.closest('.reference').prevAll('.reference-subhead')[0]).find('.search-term').text();
       // create link
       if ($menu.hasClass('create-link')) {
-        createLink($menu.closest('.reference').data('href'), 
-          $menu.closest('.reference').prev('.reference-subhead').find('.search-term').text());
+        createLink(link, text);
         return;
       }
       // create footnote
       if ($menu.hasClass('create-footnote')) {
-        console.log('create footnote clicked');
+        createFootnote(link, text);
         return;
       }
       // create new
@@ -44,7 +46,7 @@ $(function() {
     // clicking the result somewhere else opens the result in a new tab
     var $reference = $target.closest('.reference');
     if ($reference.data('href')) {
-      var win = window.open($target.data('href'), '_blank');
+      var win = window.open($reference.data('href'));
       win.focus();
       return;
     }
@@ -56,11 +58,11 @@ $(function() {
     webPages: {
       value: [{
         name: 'Lorem ipsum dolor sit amet',
-        url: 'http://example.com',
+        displayUrl: 'http://example.com',
         snippet: 'consectetur adipisicing elit. Aut quasi et consectetur voluptates vero culpa eveniet illum vel tenetur dignissimos? Aut itaque tenetur dolores sapiente quis, porro, vero natus autem!'
       }, {
         name: 'Migas neutra occupy humblebrag green juice',
-        url: 'http://example.com',
+        displayUrl: 'http://example.com',
         snippet: 'Everyday carry roof party church-key hell of waistcoat. Scenester squid polaroid selfies gluten-free single-origin coffee butcher. Fanny pack air plant hammock, tofu try-hard austin umami franzen polaroid authentic selfies chartreuse.'
       }]
     }
@@ -81,6 +83,7 @@ function doSearch(search) {
     },
     contentType: 'application/json'
   }).done(function(data) {
+    console.log(data, search);
     processResults(data, search);
   }).fail(function(error) {
     console.log(error);
@@ -89,7 +92,7 @@ function doSearch(search) {
 
 function processResults(data, search) {
   data.webPages.value.reverse().forEach(function(result) {
-    populateWebResults(result.name, result.url, result.snippet);
+    populateWebResults(result.name, result.displayUrl, result.snippet);
   });
 
   if (data.images) {
@@ -125,4 +128,24 @@ function createLink(link, text) {
   var val = $textarea.val();
   var newval = val.replace(`{${text}}`, `[${text}](${link})`);
   $textarea.val(newval);
+} 
+
+function createFootnote(link, text) {
+  var $textarea = $('.main-textarea');
+  var cursorPos = $textarea.prop('selectionStart');
+  var val = $textarea.val();
+  var textBefore = val.substring(0,  cursorPos);
+  var textAfter  = val.substring(cursorPos, val.length);
+
+  // multiple footnote style links
+  var re = /\[\[([\s\S]*?)\]\]/g; //capture footnote links
+  var results;
+  var lastResult;
+  while ((results = re.exec(textBefore)) !== null) {
+    lastResult = results[1];
+  }
+  var footnoteNumber = isNaN(parseInt(lastResult) + 1) ? 1 : parseInt(lastResult) + 1;
+  
+  var newval = `[[${footnoteNumber}]](${link})`;
+  $textarea.val(textBefore + newval + textAfter);
 } 
