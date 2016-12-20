@@ -24,7 +24,8 @@ $(function() {
     if ($menu.length) {
       // create link
       if ($menu.hasClass('create-link')) {
-        console.log('create link clicked');
+        createLink($menu.closest('.reference').data('href'), 
+          $menu.closest('.reference').prev('.reference-subhead').find('.search-term').text());
         return;
       }
       // create footnote
@@ -64,6 +65,7 @@ $(function() {
       }]
     }
   }, 'Lorem ipsum');
+  $('.main-textarea').val('{Lorem ipsum}')
 
 });
 
@@ -98,7 +100,7 @@ function processResults(data, search) {
     $imageResults.prependTo($('.reference-results'));
   }
   
-  $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> ${search}</div>`);  
+  $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> <span class="search-term">${search}</span></div>`);  
   var backgroundTimeout = setTimeout(function() {
     $('.reference-subhead').removeClass('yellow');
   }, 3000);
@@ -117,3 +119,10 @@ function populateWebResults(title, link, description) {
 function populateImageResults($imageResults, link, thumb) {
   $imageResults.append(`<a href="${link}" target="_blank"><img src="${thumb}"></a>`);
 }
+
+function createLink(link, text) {
+  var $textarea = $('.main-textarea');
+  var val = $textarea.val();
+  var newval = val.replace(`{${text}}`, `[${text}](${link})`);
+  $textarea.val(newval);
+} 
