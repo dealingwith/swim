@@ -17,12 +17,53 @@ $(function() {
   });
 
   $('.reference-results').on('click', function(e) {
-    var $target = $(e.target).closest('.reference');
-    if ($target.data('href')) {
+    var $target = $(e.target);
+
+    // menu links
+    var $menu = $target.closest('.menu');
+    if ($menu.length) {
+      // create link
+      if ($menu.hasClass('create-link')) {
+        console.log('create link clicked');
+        return;
+      }
+      // create footnote
+      if ($menu.hasClass('create-footnote')) {
+        console.log('create footnote clicked');
+        return;
+      }
+      // create new
+      if ($menu.hasClass('create-new')) {
+        console.log('create new clicked');
+        return;
+      }
+    }
+
+
+    // clicking the result somewhere else opens the result in a new tab
+    var $reference = $target.closest('.reference');
+    if ($reference.data('href')) {
       var win = window.open($target.data('href'), '_blank');
       win.focus();
+      return;
     }
+
   });
+
+  // test data
+  processResults({
+    webPages: {
+      value: [{
+        name: 'Lorem ipsum dolor sit amet',
+        url: 'http://example.com',
+        snippet: 'consectetur adipisicing elit. Aut quasi et consectetur voluptates vero culpa eveniet illum vel tenetur dignissimos? Aut itaque tenetur dolores sapiente quis, porro, vero natus autem!'
+      }, {
+        name: 'Migas neutra occupy humblebrag green juice',
+        url: 'http://example.com',
+        snippet: 'Everyday carry roof party church-key hell of waistcoat. Scenester squid polaroid selfies gluten-free single-origin coffee butcher. Fanny pack air plant hammock, tofu try-hard austin umami franzen polaroid authentic selfies chartreuse.'
+      }]
+    }
+  }, 'Lorem ipsum');
 
 });
 
@@ -38,27 +79,29 @@ function doSearch(search) {
     },
     contentType: 'application/json'
   }).done(function(data) {
-    console.log(data);
-    
-    data.webPages.value.forEach(function(result) {
-      populateWebResults(result.name, result.url, result.snippet);
-    });
-
-    if (data.images) {
-      var $imageResults = $(`<div class="reference images"></div>`);
-      data.images.value.forEach(function(result) {
-        populateImageResults($imageResults, result.contentUrl, result.thumbnailUrl);  
-      });
-      $imageResults.prependTo($('.reference-results'));
-    }
-    
-    $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-search"></span> ${search}</div>`);  
-    var backgroundTimeout = setTimeout(function() {
-      $('.reference-subhead').removeClass('yellow');
-    }, 3000);
+    processResults(data, search);
   }).fail(function(error) {
     console.log(error);
   });
+}
+
+function processResults(data, search) {
+  data.webPages.value.reverse().forEach(function(result) {
+    populateWebResults(result.name, result.url, result.snippet);
+  });
+
+  if (data.images) {
+    var $imageResults = $(`<div class="reference images"></div>`);
+    data.images.value.reverse().forEach(function(result) {
+      populateImageResults($imageResults, result.contentUrl, result.thumbnailUrl);  
+    });
+    $imageResults.prependTo($('.reference-results'));
+  }
+  
+  $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> ${search}</div>`);  
+  var backgroundTimeout = setTimeout(function() {
+    $('.reference-subhead').removeClass('yellow');
+  }, 3000);
 }
 
 function populateWebResults(title, link, description) {

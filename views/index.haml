@@ -5,26 +5,6 @@
     .col-md-8
       %textarea{:class => 'main-textarea form-control', :placeholder => 'Type things you want to search for {in brackets like this}'}
     .col-md-4.reference-results
-      /test content
-      .reference-subhead
-        %span{:class => "glyphicon glyphicon-search"}
-        Search term
-      .reference
-        %p{:class => "head"}
-          Title Goes Here
-        %p
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam delectus at optio distinctio ullam reiciendis, tenetur magni minima magnam, quidem cupiditate unde nemo iure dolor quibusdam ratione, sint eos veniam.
-        .reference-menu
-          %a 
-            %span{:class => "glyphicon glyphicon-link"}
-            %span{:class => "link-text"}link
-          %a 
-            %span{:class => "glyphicon glyphicon-bookmark"}
-            %span{:class => "link-text"}footnote
-          %a 
-            %span{:class => "glyphicon glyphicon-file"}
-            %span{:class => "link-text"}new
-      /test content
 
 %script{:id => 'template-result', :type => "text/x-handlebars-template"}
   = File.read "views/templates/result.html"
