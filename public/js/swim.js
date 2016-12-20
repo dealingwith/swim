@@ -138,14 +138,17 @@ function createFootnote(link, text) {
   var textAfter  = val.substring(cursorPos, val.length);
 
   // multiple footnote style links
-  var re = /\[\[([\s\S]*?)\]\]/g; //capture footnote links
+  var re = /\[\[([\s\S]*?)\]\(/g; //capture footnote links
   var results;
   var lastResult;
   while ((results = re.exec(textBefore)) !== null) {
     lastResult = results[1];
   }
   var footnoteNumber = isNaN(parseInt(lastResult) + 1) ? 1 : parseInt(lastResult) + 1;
-  
-  var newval = `[[${footnoteNumber}]](${link})`;
+
+  // reformat SWIM {search syntax}
+  textBefore = textBefore.replace(`{${text}}`, text);
+
+  var newval = `[[${footnoteNumber}](${link})]`;
   $textarea.val(textBefore + newval + textAfter);
 } 
