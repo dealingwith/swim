@@ -1,3 +1,9 @@
+
+var resultsCollection = new Results();
+var resultsView = new ResultsView({
+  collection: resultsCollection
+});
+  
 $(function() {
 
   $('.main-textarea').focus().on('keyup', function(keyupEvent) {
@@ -54,20 +60,20 @@ $(function() {
   });
 
   // test data
-  processResults({
-    webPages: {
-      value: [{
-        name: 'Lorem ipsum dolor sit amet',
-        displayUrl: 'http://example.com',
-        snippet: 'consectetur adipisicing elit. Aut quasi et consectetur voluptates vero culpa eveniet illum vel tenetur dignissimos? Aut itaque tenetur dolores sapiente quis, porro, vero natus autem!'
-      }, {
-        name: 'Migas neutra occupy humblebrag green juice',
-        displayUrl: 'http://example.com',
-        snippet: 'Everyday carry roof party church-key hell of waistcoat. Scenester squid polaroid selfies gluten-free single-origin coffee butcher. Fanny pack air plant hammock, tofu try-hard austin umami franzen polaroid authentic selfies chartreuse.'
-      }]
-    }
-  }, 'Lorem ipsum');
-  $('.main-textarea').val('{Lorem ipsum}')
+  // processResults({
+  //   webPages: {
+  //     value: [{
+  //       name: 'Lorem ipsum dolor sit amet',
+  //       displayUrl: 'http://example.com',
+  //       snippet: 'consectetur adipisicing elit. Aut quasi et consectetur voluptates vero culpa eveniet illum vel tenetur dignissimos? Aut itaque tenetur dolores sapiente quis, porro, vero natus autem!'
+  //     }, {
+  //       name: 'Migas neutra occupy humblebrag green juice',
+  //       displayUrl: 'http://example.com',
+  //       snippet: 'Everyday carry roof party church-key hell of waistcoat. Scenester squid polaroid selfies gluten-free single-origin coffee butcher. Fanny pack air plant hammock, tofu try-hard austin umami franzen polaroid authentic selfies chartreuse.'
+  //     }]
+  //   }
+  // }, 'Lorem ipsum');
+  // $('.main-textarea').val('{Lorem ipsum}')
 
 });
 
@@ -92,21 +98,25 @@ function doSearch(search) {
 
 function processResults(data, search) {
   data.webPages.value.reverse().forEach(function(result) {
-    populateWebResults(result.name, result.displayUrl, result.snippet);
+    resultsCollection.add(new Result({
+      search: search,
+      result: result
+    }));
+    // populateWebResults(result.name, result.displayUrl, result.snippet);
   });
 
-  if (data.images) {
-    var $imageResults = $(`<div class="reference images"></div>`);
-    data.images.value.reverse().forEach(function(result) {
-      populateImageResults($imageResults, result.contentUrl, result.thumbnailUrl);  
-    });
-    $imageResults.prependTo($('.reference-results'));
-  }
+  // if (data.images) {
+  //   var $imageResults = $(`<div class="reference images"></div>`);
+  //   data.images.value.reverse().forEach(function(result) {
+  //     populateImageResults($imageResults, result.contentUrl, result.thumbnailUrl);  
+  //   });
+  //   $imageResults.prependTo($('.reference-results'));
+  // }
   
-  $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> <span class="search-term">${search}</span></div>`);  
-  var backgroundTimeout = setTimeout(function() {
-    $('.reference-subhead').removeClass('yellow');
-  }, 3000);
+  // $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> <span class="search-term">${search}</span></div>`);  
+  // var backgroundTimeout = setTimeout(function() {
+  //   $('.reference-subhead').removeClass('yellow');
+  // }, 3000);
 }
 
 function populateWebResults(title, link, description) {
