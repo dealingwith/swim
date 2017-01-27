@@ -1,80 +1,7 @@
-
+var textarea = new TextareaView();
 var resultsCollection = new Results();
 var resultsView = new ResultsView({
   collection: resultsCollection
-});
-  
-$(function() {
-
-  $('.main-textarea').focus().on('keyup', function(keyupEvent) {
-    var key = keyupEvent.key;
-    var $textarea = $('.main-textarea');
-    if (key == '}') {
-      var text = $textarea.val();
-      var re = /\{([\s\S]*?)\}/g; //capture everything between brackets
-      var results;
-      var lastResult;
-      while ((results = re.exec(text)) !== null) {
-        lastResult = results[1];
-      }
-
-      doSearch(lastResult);
-    }
-  });
-
-  $('.reference-results').on('click', function(e) {
-    var $target = $(e.target);
-
-    // menu links
-    var $menu = $target.closest('.menu');
-    if ($menu.length) {
-      var link = $menu.closest('.reference').data('href');
-      // these traversals are nonsense. refactor this with something
-      var text = $($menu.closest('.reference').prevAll('.reference-subhead')[0]).find('.search-term').text();
-      // create link
-      if ($menu.hasClass('create-link')) {
-        createLink(link, text);
-        return;
-      }
-      // create footnote
-      if ($menu.hasClass('create-footnote')) {
-        createFootnote(link, text);
-        return;
-      }
-      // create new
-      if ($menu.hasClass('create-new')) {
-        console.log('create new clicked');
-        return;
-      }
-    }
-
-
-    // clicking the result somewhere else opens the result in a new tab
-    var $reference = $target.closest('.reference');
-    if ($reference.data('href')) {
-      var win = window.open($reference.data('href'));
-      win.focus();
-      return;
-    }
-
-  });
-
-  // test data
-  // processResults({
-  //   webPages: {
-  //     value: [{
-  //       name: 'Lorem ipsum dolor sit amet',
-  //       displayUrl: 'http://example.com',
-  //       snippet: 'consectetur adipisicing elit. Aut quasi et consectetur voluptates vero culpa eveniet illum vel tenetur dignissimos? Aut itaque tenetur dolores sapiente quis, porro, vero natus autem!'
-  //     }, {
-  //       name: 'Migas neutra occupy humblebrag green juice',
-  //       displayUrl: 'http://example.com',
-  //       snippet: 'Everyday carry roof party church-key hell of waistcoat. Scenester squid polaroid selfies gluten-free single-origin coffee butcher. Fanny pack air plant hammock, tofu try-hard austin umami franzen polaroid authentic selfies chartreuse.'
-  //     }]
-  //   }
-  // }, 'Lorem ipsum');
-  // $('.main-textarea').val('{Lorem ipsum}')
-
 });
 
 function doSearch(search) {
@@ -102,7 +29,6 @@ function processResults(data, search) {
       search: search,
       result: result
     }));
-    // populateWebResults(result.name, result.displayUrl, result.snippet);
   });
 
   // if (data.images) {
@@ -112,53 +38,8 @@ function processResults(data, search) {
   //   });
   //   $imageResults.prependTo($('.reference-results'));
   // }
-  
-  // $('.reference-results').prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> <span class="search-term">${search}</span></div>`);  
-  // var backgroundTimeout = setTimeout(function() {
-  //   $('.reference-subhead').removeClass('yellow');
-  // }, 3000);
-}
-
-function populateWebResults(title, link, description) {
-  var referenceResultsTemplate = Handlebars.compile($('#template-result').html() || "");
-  var referenceResultsHtml = referenceResultsTemplate({
-    title: title,
-    link: link,
-    description: description
-  });
-  $(referenceResultsHtml).prependTo($('.reference-results'));
 }
 
 function populateImageResults($imageResults, link, thumb) {
   $imageResults.append(`<a href="${link}" target="_blank"><img src="${thumb}"></a>`);
 }
-
-function createLink(link, text) {
-  var $textarea = $('.main-textarea');
-  var val = $textarea.val();
-  var newval = val.replace(`{${text}}`, `[${text}](${link})`);
-  $textarea.val(newval);
-} 
-
-function createFootnote(link, text) {
-  var $textarea = $('.main-textarea');
-  var cursorPos = $textarea.prop('selectionStart');
-  var val = $textarea.val();
-  var textBefore = val.substring(0,  cursorPos);
-  var textAfter  = val.substring(cursorPos, val.length);
-
-  // multiple footnote style links
-  var re = /\[\[([\s\S]*?)\]\(/g; //capture footnote links
-  var results;
-  var lastResult;
-  while ((results = re.exec(textBefore)) !== null) {
-    lastResult = results[1];
-  }
-  var footnoteNumber = isNaN(parseInt(lastResult) + 1) ? 1 : parseInt(lastResult) + 1;
-
-  // reformat SWIM {search syntax}
-  textBefore = textBefore.replace(`{${text}}`, text);
-
-  var newval = `[[${footnoteNumber}](${link})]`;
-  $textarea.val(textBefore + newval + textAfter);
-} 

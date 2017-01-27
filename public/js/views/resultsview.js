@@ -11,10 +11,15 @@ var ResultsView = Backbone.View.extend({
   },
 
   render: function() {
+    this.$el.empty();
     var self = this;
-    this.collection.each(function(result){
-      var resultView = new ResultView({ model: result });
-      self.$el.prepend(resultView.el);
+    var groupedCollection = this.collection.groupBy('search');
+    _.each(groupedCollection, function(childCollection, search) {
+      _.each(childCollection, function(result) {
+        var resultView = new ResultView({model: result});
+        self.$el.prepend(resultView.el);
+      });
+      self.$el.prepend(`<div class="reference-subhead yellow"><span class="glyphicon glyphicon-tint"></span> <span class="search-term">${search}</span></div>`);
     });
   }
 
